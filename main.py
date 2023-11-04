@@ -1,14 +1,17 @@
 import os
 import struct
 
-from config import BITS_PER_SAMPLE
+import matplotlib.pyplot as plot
+
+from config import BYTES_PER_SAMPLE
 
 pcm_path = 'aud/aud.pcm'
 data: list[int] = []
 with open(pcm_path, 'rb') as pcm:
-    for f in range(0, os.path.getsize(pcm_path), BITS_PER_SAMPLE):
-        data.append(struct.unpack('<H', pcm.read(BITS_PER_SAMPLE))[0])
-        # if len(data) > 1000: break
-        if data[int(f / BITS_PER_SAMPLE)] != 0: break
-print(data)
-print('RECORD_DEVICE_KICKSTART(2):', (len(data) - BITS_PER_SAMPLE) * 2, 'bytes')
+    pcm.seek(384)
+    for f in range(384, os.path.getsize(pcm_path), BYTES_PER_SAMPLE):
+        data.append(struct.unpack('<h', pcm.read(BYTES_PER_SAMPLE))[0])
+    # the initial noise isn't from the kickstart buffer! it's longer than that
+    # the kickstart buffer is all zeroes, but these are loud numbers!
+plot.plot(data)
+plot.show()
