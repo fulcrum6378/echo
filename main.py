@@ -48,6 +48,4 @@ print('Wavelengths:', wavelengths)
 
 # analyse waves
 for w in waves:
-    if len(w) != 3: continue
-    print(((w[0] + w[2]) / 2) - w[1])
-    # LESSON: the middle wave mostly doesn't illustrate a straight line from the first to the third!
+    pass
